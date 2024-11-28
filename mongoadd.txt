@@ -1,0 +1,197 @@
+To migrate your project to use MongoDB and Node.js for handling the backend, follow the steps below:
+
+1. Project Structure
+
+Here is how your folder structure will look after the migration:
+
+/kingbell-hotel
+├── /public
+│   ├── index.html            # Homepage
+│   ├── login.html            # Login page
+│   ├── csslogin.css          # CSS for styling
+├── /server
+│   ├── server.js             # Main Node.js server file
+│   ├── /models
+│   │   ├── User.js           # User schema for MongoDB
+│   ├── /routes
+│   │   ├── auth.js           # Routes for registration/login
+├── .env                      # Environment variables
+├── package.json              # Node.js dependencies
+
+2. Set Up Node.js
+
+	•	Initialize a Node.js project:
+
+npm init -y
+
+
+	•	Install required dependencies:
+
+npm install express mongoose bcryptjs jsonwebtoken body-parser dotenv
+
+3. Create the server.js File
+
+The server.js file will set up your Node.js server, connect to MongoDB, and handle routes:
+
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+
+dotenv.config();
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(bodyParser.json());
+app.use(express.static("public")); // Serve static HTML and CSS files
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("Connected to MongoDB"))
+    .catch((err) => console.error("MongoDB connection error:", err));
+
+// Routes
+const authRoutes = require("./routes/auth");
+app.use("/api/auth", authRoutes);
+
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
+
+4. Define a User Schema
+
+Create server/models/User.js to define the structure for storing user details in MongoDB:
+
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+
+const userSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+});
+
+// Hash the password before saving
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+    this.password = await bcrypt.hash(this.password, 12);
+    next();
+});
+
+module.exports = mongoose.model("User", userSchema);
+
+5. Create Routes for Authentication
+
+Create server/routes/auth.js to handle user registration and login:
+
+const express = require("express");
+const User = require("../models/User");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
+const router = express.Router();
+
+// User Registration
+router.post("/register", async (req, res) => {
+    try {
+        const { name, email, password, confirm_password } = req.body;
+
+        // Validate input
+        if (password !== confirm_password) {
+            return res.status(400).json({ message: "Passwords do not match" });
+        }
+
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "Email already in use" });
+        }
+
+        // Create new user
+        const user = new User({ name, email, password });
+        await user.save();
+
+        res.status(201).json({ message: "User registered successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// User Login
+router.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Find user
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Check password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+
+        // Generate JWT
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        res.status(200).json({ token });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+module.exports = router;
+
+6. Update HTML Forms
+
+Update the action attributes in your HTML forms to send data to the Node.js server:
+
+Register Form (in index.html or login.html)
+
+<form action="/api/auth/register" method="post">
+    <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="name" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" name="email" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" name="confirm_password" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Submit">
+    </div>
+</form>
+
+7. Add .env for Environment Variables
+
+Create a .env file to store sensitive information like your MongoDB URI and JWT secret:
+
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/kingbell
+JWT_SECRET=your_jwt_secret
+
+8. Test the Application
+
+	•	Start your Node.js server:
+
+node server.js
+
+
+	•	Open the registration form in a browser and fill out the form. The data will be sent to your Node.js backend, stored in MongoDB, and validated for registration or login.
+
+9. Serve the Application
+
+If you’re deploying this, use a production-ready server like NGINX or Apache to serve the HTML files and use a process manager like PM2 to run the Node.js server in production.
+
+Let me know if you’d like further clarification or help!

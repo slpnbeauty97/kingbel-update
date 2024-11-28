@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Kingbell - Online Booking System</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <!-- Font Awesome for icons -->
+
+
+</head>
+<body>
+    <header>
+        <div class="logo">The Kingbell</div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search...">
+            <button id="searchButton">Search</button>
+        </div>
+        <div class="icons">
+            <i class="fas fa-comment"></i>
+            <i class="fas fa-share"></i>
+            <i class="fas fa-bell"></i>
+            <div class="profile-dropdown">
+                <i class="fas fa-user"></i>
+                <div class="dropdown-content">
+                    <a href="#">Profile</a>
+                    <a href="#">Settings</a>
+                    <a href="#">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <nav class="sidebar">
+        <ul>
+            <li><i class="fas fa-home"></i> Home</li>
+            <li><i class="fas fa-search"></i> Search</li>
+            <li><i class="fas fa-wallet"></i> Wallet</li>
+            <li><i class="fas fa-question-circle"></i> Help</li>
+        </ul>
+    </nav>
+    <main>
+        <div class="main-header">
+            <div class="welcome">Welcome back, Nelius</div>
+            <div class="location">
+                <select name="location" id="location">
+                    <option value="">Select Location</option>
+                    <!-- Populate location options dynamically if needed -->
+                </select>
+            </div>
+            <div class="calendar">
+                <input type="date" id="calendarDate">
+            </div>
+        </div>
+        <div class="recent-search">
+            <h2>Recent Searches</h2>
+            <div class="search-images">
+                <!-- Images here -->
+            </div>
+            <button id="seeMoreButton">See More</button>
+        </div>
+        <div class="categories">
+            <h2>Categories</h2>
+            <ul>
+                <li>Hotel</li>
+                <li>Motel</li>
+                <li>Resort</li>
+                <li>Villa</li>
+                <li>Apartment</li>
+                <li>Guest house</li>
+            </ul>
+        </div>
+        <div class="recommendations">
+            <h2>Recommendations for You</h2>
+            <!-- Recommendation cards dynamically populated here -->
+                <div class="recommendation-cards">
+                    <div class="card">
+                        <img src="C:\Users\USER\Downloads\kingbell-hotel-main\premium_photo-1661964071015-d97428970584.jpg" alt="Image 1">
+                        <div class="card-info">
+                            <h3>Name of the Hotel</h3>
+                            <p>Location</p>
+                            <p>Price/24 hrs</p>
+                            <div class="rating">
+                                <!-- Insert rating icon or stars here -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Repeat for other recommendation cards -->
+                            <div class="card">
+                                <img src="C:\Users\ckmacharia\Documents\thekingbellonlinebookings\assets\Hotel Bedroom with Furniture.jpg" alt="Image 1">
+                                <div class="card-info">
+                                    <h3>Name of the Hotel</h3>
+                                    <p>Location</p>
+                                    <p>Price/24 hrs</p>
+                                    <div class="rating">
+                                        <!-- Insert rating icon or stars here -->
+                                    </div>
+                                </div>
+                            </div>
+                                    <div class="card">
+                                        <img src="C:\Users\ckmacharia\Documents\thekingbellonlinebookings\assets\Hotel Bedroom with Furniture.jpg" alt="Image 1">
+                                        <div class="card-info">
+                                            <h3>Name of the Hotel</h3>
+                                            <p>Location</p>
+                                            <p>Price/24 hrs</p>
+                                            <div class="rating">
+                                                <!-- Insert rating icon or stars here -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <div class="card">
+                                            <img src="thekingbellonlinebookings/assets/Hotel Bedroom with Furniture.jpg" alt="Image 1">
+                                            <div class="card-info">
+                                                <h3>Name of the Hotel</h3>
+                                                <p>Location</p>
+                                                <p>Price/24 hrs</p>
+                                                <div class="rating">
+                                                    <!-- Insert rating icon or stars here -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <div class="card">
+                                                <img src="thekingbellonlinebookings/assets/Hotel Bedroom with Furniture.jpg" alt="Image 1">
+                                                <div class="card-info">
+                                                    <h3>Name of the Hotel</h3>
+                                                    <p>Location</p>
+                                                    <p>Price/24 hrs</p>
+                                                    <div class="rating">
+                                                        <!-- Insert rating icon or stars here -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                    
+
+                    </div>
+                 
+                </div>
+            </div>
+
+
+
+
+
+
+
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 The Kingbell. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
